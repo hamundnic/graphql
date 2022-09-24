@@ -5,4 +5,69 @@
     hello:String!
     helloWithName(name:String): String!
     peopleNumber: Int!
+    #Lista de los Elemetos
+    booksList: Result!
+    peopleList:Result!
+    # Elementos seleccionados
+    book(id: ID!): Result!
+    people(id: ID!): Result!
+  }
+  type Mutation{
+    addBook(book: BookInput!): Result!
+    updateBook(book: BookInput!): Result!
+     deleteBook(id: ID!): Result!
+  }
+union Data = Book | People
+#Informacion de los libros
+  type Book{
+     
+    id: ID!
+    title: String!
+    isbn: String!
+    pageCount: Int!
+    publishedDate: String
+    thumbnailUrl: String
+    shortDescription: String
+    longDescription: String
+    status: String
+    authors: [String!]!
+    byPeoplesBuy:[People]
+  }
+  input BookInput {
+     id: ID
+    title: String!
+    isbn: String!
+    pageCount: Int!
+    publishedDate: String
+    thumbnailUrl: String
+    shortDescription: String
+    longDescription: String
+    status: StatusEnum = UNPUBLISH
+    authors: [String!]!
+  }
+  enum StatusEnum {
+    PUBLISH
+    UNPUBLISH
+  }
+#informacion de la persona
+  type People{
+    
+    id: ID!
+    name: String!
+    email: String!
+    website: String
+    github: String
+    twitter: String
+    books: [String!]!
+    # Libros que ha comprado esta person
+    booksBuy: [Book]
+  
+  }
+
+  # definir resultado con mas detalle
+  type Result{
+    status: Boolean!
+    message:String!
+    list:[Data!]
+    item:Data
   }

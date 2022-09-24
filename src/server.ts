@@ -1,10 +1,10 @@
-import { ApolloServer, gql } from "apollo-server-express";
+import { ApolloServer } from "apollo-server-express";
 import compression from "compression";
 import express, { Application } from "express";
 import { GraphQLSchema } from "graphql";
-import { makeExecutableSchema } from "@graphql-tools/schema";
-import { Server, createServer } from 'http';
 
+import { Server, createServer } from 'http';
+import dephLimit from 'graphql-depth-limit';
 class GrapgQLServer{
 // propiedades
 private app!:Application;
@@ -34,7 +34,8 @@ private async configApolloServerExpress(){
 
   const apolloServer = new ApolloServer({
     schema:this.schema,
-    introspection:true
+    introspection:true,
+    validationRules: [dephLimit(3)]
   });
   await apolloServer.start();
 apolloServer.applyMiddleware({app:this.app,cors:true})
